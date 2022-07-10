@@ -3,6 +3,10 @@ import React, { useState } from 'react'
 import Logo from '../../assets/images/cutlery.png'
 import CustomInput from '../components/CustomInput'
 import CustomButton from '../components/CustomButton'
+import io from "socket.io-client";
+
+// const socket = io("http://192.249.18.146:443");
+const socket = io("http://192.249.18.165:443");
 
 
 const SignInScreen = () => {
@@ -11,8 +15,20 @@ const SignInScreen = () => {
 
     const win = Dimensions.get('window')
 
-    const onSignInPress = () => {
+    const object1 = {
+        id: 1,
+        name: "hello"
+    }
 
+    socket.on("tunnel", (message) => {
+        console.log("-------------------receive message----------------");
+        console.log(message);
+    });
+
+    const onSignInPress = () => {
+        console.log("-------------------send message----------------");
+        // socket.emit("tunnel", object1);
+        socket.emit("msg", object1);
     }
     const onForgotPasswordPressed = () => {
 
@@ -35,12 +51,12 @@ const SignInScreen = () => {
                     maxHeight: 200,
                 }]}
             />
-            <CustomInput placeholder="Username" value={username} setValue={setUsername}/>
-            <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true}/>
-            <CustomButton text="Sign In" onPress={onSignInPress}/>
-            <CustomButton text="Forgot Password?" onPress={onForgotPasswordPressed} type="TERTIARY"/>
-            <CustomButton text="Sign In with Google" onPress={onSignInGooglePress} bgColor="#FAE9EA" fgColor="#DD4D44"/>
-            <CustomButton text="Sign In with Kakao" onPress={onSignInKakaoPress} bgColor="#FEE500" fgColor="#000000"/>
+            <CustomInput placeholder="Username" value={username} setValue={setUsername} />
+            <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} />
+            <CustomButton text="Sign In" onPress={onSignInPress} />
+            <CustomButton text="Forgot Password?" onPress={onForgotPasswordPressed} type="TERTIARY" />
+            <CustomButton text="Sign In with Google" onPress={onSignInGooglePress} bgColor="#FAE9EA" fgColor="#DD4D44" />
+            <CustomButton text="Sign In with Kakao" onPress={onSignInKakaoPress} bgColor="#FEE500" fgColor="#000000" />
         </View>
     )
 }
