@@ -1,9 +1,9 @@
-import {Text, StyleSheet, Pressable, TouchableHighlight } from 'react-native'
+import {Text, StyleSheet, Pressable, TouchableHighlight, TouchableOpacity } from 'react-native'
 import React from 'react'
 
 const CustomButton = ({text, onPress, type="PRIMARY", bgColor, fgColor}) => {
   return (
-    <TouchableHighlight
+    <TouchableOpacity
         onPress={onPress} 
         style={[
           styles.container,
@@ -18,7 +18,7 @@ const CustomButton = ({text, onPress, type="PRIMARY", bgColor, fgColor}) => {
           ]}>
             {text}
       </Text>
-    </TouchableHighlight>
+    </TouchableOpacity>
   )
 }
 
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: 50,
         maxWidth: 500,
-        borderRadius: 5,
+        borderRadius: 10,
 
         flexDirection: "column",
         alignItems: "center",

@@ -24,12 +24,11 @@ const REST_API_KEY = "7bdb6912e4211d56037b4ddb88b84488";
 const LOGOUT_REDIRECT_URI = "http://192.249.18.145/oauth/kakao/logout";
 
 const Main = ({ navigation }) => {
-    // const { nickname, profile_image } = useSelector((state) => state.users);
-    // const dispatch = useDispatch();
-    // const onSignOutKakaoPress = async () => {
-    //     navigation.navigate("Kakao Sign Out");
-    // };
+    const { nickname, profile_image } = useSelector((state) => state.users);
     const onPressRoomCreate = () => {};
+    const onPressSignOut = () => {
+        navigation.navigate("로그아웃")
+    }
     return (
         <View style={styles.container}>
             <Text style={styles.title}>몰입캠프 2분반</Text>
@@ -75,15 +74,15 @@ const Main = ({ navigation }) => {
             <ProfileBox
                 like_content={"제육볶음"}
                 hate_content={"쟁반짜장"}
-                image_uri = {"https://img.etimg.com/thumb/width-640,height-480,imgsize-482493,resizemode-1,msid-68228307/news/politics-and-nation/how-central-european-state-serbia-contributed-to-making-of-uri/uri-indi.jpg"}
-                nickname={"이창해"}
+                image_uri = {profile_image}
+                nickname={nickname}
              />
             <View style={styles.iconContainer}>
                 <TouchableOpacity style={styles.icon}>
                     <FontAwesome name="exchange" size={30} color="black" />
                     <Text>채널 변경</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.icon}>
+                <TouchableOpacity style={styles.icon} onPress={onPressSignOut}>
                     <MaterialIcons name="logout" size={30} color="black" />
                     <Text>로그아웃</Text>
                 </TouchableOpacity>

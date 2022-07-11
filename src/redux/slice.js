@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    nickname: '',
-    profile_image: '',
-}
+    nickname: "",
+    profile_image: "",
+};
