@@ -1,14 +1,147 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, Animated } from "react-native";
+import React from "react";
+import ProfileImage from "../components/ProfileImage";
+import MenuTextBox from "../components/MenuTextBox";
 
 const RoomScreen = () => {
-  return (
-    <View>
-      <Text>RoomScreen</Text>
-    </View>
-  )
-}
+    const pad_array = (arr, len, fill) => {
+        return arr.concat(Array(len).fill(fill)).slice(0, len);
+    };
+    const image_list = Array(15).fill(
+        "https://img.etimg.com/thumb/width-640,height-480,imgsize-482493,resizemode-1,msid-68228307/news/politics-and-nation/how-central-european-state-serbia-contributed-to-making-of-uri/uri-indi.jpg"
+    );
+    const nickname_list = Array.from(Array(15).keys());
 
-export default RoomScreen
+    const padded_image_list = pad_array(
+        image_list,
+        20,
+        "https://images.theconversation.com/files/457052/original/file-20220408-15-pl446k.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1000&fit=clip"
+    );
+    const padded_nickname_list = pad_array(nickname_list, 20, "");
+    const entity_list = padded_image_list.map((x, index) => ({
+        uri: x,
+        nickname: padded_nickname_list[index],
+    }));
 
-const styles = StyleSheet.create({})
+    const menu = "제육볶음";
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>카이마루 학식 먹을 사람~</Text>
+            <View style={styles.profileContainerHorizontal}>
+                {[0, 10, 6, 14, 2]
+                    .map((i) => entity_list[i])
+                    .map((x, key) => {
+                        return (
+                            <View style={styles.imageContainer}>
+                                <ProfileImage
+                                    image_uri={x.uri}
+                                    nickname={
+                                        x.nickname === "" ? "" : x.nickname + 1
+                                    }
+                                    key={key}
+                                />
+                            </View>
+                        );
+                    })}
+            </View>
+            <View style={styles.containerVertical}>
+                <View style={styles.profileContainerVertical}>
+                    {[18, 13, 4, 9, 17]
+                        .map((i) => entity_list[i])
+                        .map((x, key) => {
+                            return (
+                                <View style={styles.imageContainer}>
+                                    <ProfileImage
+                                        image_uri={x.uri}
+                                        nickname={
+                                            x.nickname === ""
+                                                ? ""
+                                                : x.nickname + 1
+                                        }
+                                        key={key}
+                                    />
+                                </View>
+                            );
+                        })}
+                </View>
+                <View style={styles.emptyContainer}>
+                    <MenuTextBox text={menu}/>
+                </View>
+                <View style={styles.profileContainerVertical}>
+                    {[16, 8, 5, 12, 19]
+                        .map((i) => entity_list[i])
+                        .map((x, key) => {
+                            return (
+                                <View style={styles.imageContainer}>
+                                    <ProfileImage
+                                        image_uri={x.uri}
+                                        nickname={
+                                            x.nickname === ""
+                                                ? ""
+                                                : x.nickname + 1
+                                        }
+                                        key={key}
+                                    />
+                                </View>
+                            );
+                        })}
+                </View>
+            </View>
+            <View style={styles.profileContainerHorizontal}>
+                {[3, 15, 7, 11, 1]
+                    .map((i) => entity_list[i])
+                    .map((x, key) => {
+                        return (
+                            <View style={styles.imageContainer}>
+                                <ProfileImage
+                                    image_uri={x.uri}
+                                    nickname={
+                                        x.nickname === "" ? "" : x.nickname + 1
+                                    }
+                                    key={key}
+                                />
+                            </View>
+                        );
+                    })}
+            </View>
+        </View>
+    );
+};
+
+export default RoomScreen;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: "center",
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: "bold",
+    },
+    profileContainerHorizontal: {
+        width: "100%",
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
+    containerVertical: {
+        width: "100%",
+        flex: 5,
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
+    profileContainerVertical: {
+        flex: 1,
+        flexDirection: "column",
+        justifyContent: "space-between",
+    },
+    imageContainer: {
+        flex: 1,
+        // backgroundColor: "blue",
+    },
+    emptyContainer: {
+        flex: 3,
+        // backgroundColor: "yellow",
+    },
+});

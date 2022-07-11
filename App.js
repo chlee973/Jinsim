@@ -8,6 +8,7 @@ import SignInScreen from "./src/views/SignInScreen";
 import Main from "./src/views/Main";
 import { Provider } from "react-redux";
 import { Store } from "./src/redux/store";
+import RoomScreen from "./src/views/RoomScreen";
 
 const Stack = createNativeStackNavigator();
 
