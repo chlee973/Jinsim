@@ -4,6 +4,7 @@ import Svg, { Path } from "react-native-svg";
 import { scale, verticalScale, moderateScale } from "react-native-size-matters";
 
 const SpeechBalloon = ({ title, content, isLeft }) => {
+    const ballon_color = "#d3d3d3"
     return (
         <View
             style={[
@@ -11,7 +12,7 @@ const SpeechBalloon = ({ title, content, isLeft }) => {
                 isLeft ? styles.itemOutLeft : styles.itemOutRight,
             ]}
         >
-            <View style={[styles.balloon, { backgroundColor: "gray" }]}>
+            <View style={[styles.balloon, { backgroundColor: ballon_color }]}>
                 <View style={styles.textbox}>
                     <View style={styles.titlebox}>
                         <Text style={styles.title}>{title}</Text>
@@ -38,14 +39,14 @@ const SpeechBalloon = ({ title, content, isLeft }) => {
                         {isLeft ? (
                             <Path
                                 d="M48,35c-7-4-6-8.75-6-17.5C28,17.5,29,35,48,35z"
-                                fill="gray"
+                                fill={ballon_color}
                                 x="0"
                                 y="0"
                             />
                         ) : (
                             <Path
                                 d="M38.484,17.5c0,8.75,1,13.5-6,17.5C51.484,35,52.484,17.5,38.484,17.5z"
-                                fill="gray"
+                                fill={ballon_color}
                                 x="0"
                                 y="0"
                             />
@@ -61,7 +62,7 @@ export default SpeechBalloon;
 
 const styles = StyleSheet.create({
     item: {
-        marginVertical: moderateScale(7, 2),
+        marginVertical: 0, //moderateScale(7, 2)
         flexDirection: "row",
     },
     itemIn: {

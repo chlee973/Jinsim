@@ -30,7 +30,10 @@ export default ProfileBox;
 const styles = StyleSheet.create({
     container: {
         width: "100%",
+        minHeight: 150,
         alignItems: "center",
+        // backgroundColor: "blue",
+        paddingVertical: 15,
     },
     balloonContainer: {
         width: "100%",

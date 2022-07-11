@@ -80,11 +80,11 @@ const Main = ({ navigation }) => {
              />
             <View style={styles.iconContainer}>
                 <TouchableOpacity style={styles.icon}>
-                    <FontAwesome name="exchange" size={35} color="black" />
+                    <FontAwesome name="exchange" size={30} color="black" />
                     <Text>채널 변경</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.icon}>
-                    <MaterialIcons name="logout" size={35} color="black" />
+                    <MaterialIcons name="logout" size={30} color="black" />
                     <Text>로그아웃</Text>
                 </TouchableOpacity>
             </View>
@@ -102,9 +102,6 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: "bold",
-    },
-    scrollViewUsers: {
-        height: 120,
     },
     scrollViewRooms: {
         width: "100%",

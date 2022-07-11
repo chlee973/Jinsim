@@ -19,6 +19,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         margin: 5,
+        // backgroundColor: "red",
+        // height: 100,
     },
     image: {
         width: 65,
@@ -30,5 +32,7 @@ const styles = StyleSheet.create({
     },
     text: {
         textAlign: "center",
+        // position: "absolute",
+        // top: 40,
     },
 });
