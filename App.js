@@ -10,6 +10,7 @@ import { Provider } from "react-redux";
 import { Store } from "./src/redux/store";
 import RoomScreen from "./src/views/RoomScreen";
 import ProfileScreen from "./src/views/ProfileScreen";
+import BanVoteScreen from "./src/views/BanVoteScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -26,7 +27,7 @@ export default function App() {
         //   </NavigationContainer>
         // </Provider>
         <SafeAreaView style={styles.container}>
-            <RoomScreen />
+            <BanVoteScreen />
         </SafeAreaView>
     );
 }
