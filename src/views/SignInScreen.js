@@ -4,8 +4,10 @@ import Logo from '../../assets/images/cutlery.png'
 import CustomInput from '../components/CustomInput'
 import CustomButton from '../components/CustomButton'
 
+const REST_API_KEY = '7bdb6912e4211d56037b4ddb88b84488'
+const REDIRECT_URI = 'http://192.249.18.145/oauth/kakao/logout'
 
-const SignInScreen = () => {
+const SignInScreen = ({navigation}) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
@@ -21,7 +23,7 @@ const SignInScreen = () => {
 
     }
     const onSignInKakaoPress = () => {
-
+        navigation.navigate('Kakao Sign In', {})
     }
 
     return (
