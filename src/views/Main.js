@@ -15,6 +15,7 @@ import RoomInfoBox from "../components/RoomInfoBox";
 import SpeechBalloon from "../components/SpeechBalloon";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
+import ProfileBox from "../components/ProfileBox";
 
 const qs = require("qs");
 const axios = require("axios");
@@ -71,27 +72,12 @@ const Main = ({ navigation }) => {
                     );
                 })}
             </ScrollView>
-            <View style={styles.balloonContainer}>
-                <SpeechBalloon
-                    style={styles.balloon}
-                    title={"LIKE"}
-                    content={"제육볶음"}
-                    isLeft={true}
-                />
-                <SpeechBalloon
-                    style={styles.balloon}
-                    title={"HATE"}
-                    content={"쟁반짜장"}
-                    isLeft={false}
-                />
-            </View>
-            <ProfileImage
-                image_uri={
-                    "https://img.etimg.com/thumb/width-640,height-480,imgsize-482493,resizemode-1,msid-68228307/news/politics-and-nation/how-central-european-state-serbia-contributed-to-making-of-uri/uri-indi.jpg"
-                }
+            <ProfileBox
+                like_content={"제육볶음"}
+                hate_content={"쟁반짜장"}
+                image_uri = {"https://img.etimg.com/thumb/width-640,height-480,imgsize-482493,resizemode-1,msid-68228307/news/politics-and-nation/how-central-european-state-serbia-contributed-to-making-of-uri/uri-indi.jpg"}
                 nickname={"이창해"}
-            />
-    
+             />
             <View style={styles.iconContainer}>
                 <TouchableOpacity style={styles.icon}>
                     <FontAwesome name="exchange" size={35} color="black" />
@@ -123,12 +109,6 @@ const styles = StyleSheet.create({
     scrollViewRooms: {
         width: "100%",
         maxHeight: "50%",
-    },
-    balloonContainer: {
-        width: "100%",
-        // flex: 1,
-        flexDirection: "row",
-        justifyContent: "space-around",
     },
     button: {},
     iconContainer: {

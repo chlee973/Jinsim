@@ -1,9 +1,11 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import ProfileImage from "./ProfileImage";
+import SpeechBalloon from "./SpeechBalloon";
 
-const ProfileBox = ({like_content, hate_content, image_uri, nickname}) => {
+const ProfileBox = ({ like_content, hate_content, image_uri, nickname }) => {
     return (
-        <View>
+        <View style={styles.container}>
             <View style={styles.balloonContainer}>
                 <SpeechBalloon
                     style={styles.balloon}
@@ -18,12 +20,7 @@ const ProfileBox = ({like_content, hate_content, image_uri, nickname}) => {
                     isLeft={false}
                 />
             </View>
-            <ProfileImage
-                image_uri={
-                    image_uri
-                }
-                nickname={nickname}
-            />
+            <ProfileImage image_uri={image_uri} nickname={nickname} />
         </View>
     );
 };
@@ -31,9 +28,12 @@ const ProfileBox = ({like_content, hate_content, image_uri, nickname}) => {
 export default ProfileBox;
 
 const styles = StyleSheet.create({
+    container: {
+        width: "100%",
+        alignItems: "center",
+    },
     balloonContainer: {
         width: "100%",
-        // flex: 1,
         flexDirection: "row",
         justifyContent: "space-around",
     },
