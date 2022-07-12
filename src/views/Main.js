@@ -19,17 +19,17 @@ import { FontAwesome } from "@expo/vector-icons";
 import ProfileBox from "../components/ProfileBox";
 import socket from "../../socket";
 import { setRoom } from "../redux/actions";
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from "@react-navigation/native";
 
 const Main = ({ navigation }) => {
     const dispatch = useDispatch();
     const [userList, setUserList] = useState([]);
     const [roomList, setRoomList] = useState([]);
     const { user_id } = useSelector((state) => state.users);
-    const { nickname, profile_image, current_channel, love, hate } = useSelector(
-        (state) => state.users
-    );
+    const { nickname, profile_image, current_channel, love, hate } =
+        useSelector((state) => state.users);
     const isFocused = useIsFocused();
+
     const onPressRoomCreate = () => {
         if (current_channel == null) {
             Alert.alert("채널을 선택해주세요");
@@ -44,6 +44,7 @@ const Main = ({ navigation }) => {
         navigation.navigate("채널 선택");
     };
     const onSelectRoom = (item) => {
+        dispatch(setRoom(item.id));
         const packet = {
             user_id: user_id,
             room_id: item.id,
@@ -62,36 +63,42 @@ const Main = ({ navigation }) => {
             nickname: item.nickname,
         });
     };
-    socket.on("change_channel", async(packet, callback) => {
-        setUserList(packet.rows)
-    })
+    useEffect(() => {
+        socket.on("change_channel", async (packet, callback) => {
+            setUserList([...packet.rows]);
+        });
+
+        socket.on("create_room", async (packet, callback) => {
+            setRoomList([...packet.rows]);
+            console.log(roomList);
+        });
+    }, []);
     useEffect(() => {
         navigation.setOptions({
             headerTitle:
-            current_channel == null
-            ? "채널을 선택해주세요"
+                current_channel == null
+                    ? "채널을 선택해주세요"
                     : current_channel,
-                });
-                if (current_channel == null) {
-                    return;
+        });
+        if (current_channel == null) {
+            return;
         }
         const packet_request_users = {
             channel_id: current_channel,
         };
         socket.emit("request_users", packet_request_users, (res) => {
-            setUserList(res.rows);
+            setUserList([...res.rows]);
         });
         const packet_request_rooms = {
             channel_id: current_channel,
         };
         socket.emit("request_rooms", packet_request_rooms, (res) => {
-            setRoomList(res.rows);
+            setRoomList([...res.rows]);
+            console.log(roomList);
+            console.log("------------------------fff---");
+            console.log(res.rows);
         });
     }, [current_channel, isFocused]);
-    useEffect(() => {
-
-    }, [current_channel])
-
     return (
         <View style={styles.container}>
             <ScrollView
@@ -119,15 +126,17 @@ const Main = ({ navigation }) => {
                 showsVerticalScrollIndicator={true}
             >
                 {roomList.map((item, key) => {
-                    <RoomInfoBox
-                        id={item.id}
-                        title={item.name}
-                        menu={item.menu}
-                        numOfPeople={1}
-                        maxCapacity={item.max_capacity}
-                        onPress={onSelectRoom}
-                        key={key}
-                    />;
+                    return (
+                        <RoomInfoBox
+                            id={item.id}
+                            title={item.name}
+                            menu={item.menu}
+                            numOfPeople={1}
+                            maxCapacity={item.max_capacity}
+                            onPress={onSelectRoom}
+                            key={current_channel * 10 + key}
+                        />
+                    );
                 })}
             </ScrollView>
             <ProfileBox

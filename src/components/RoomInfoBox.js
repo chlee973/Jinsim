@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
         marginVertical: 5,
         paddingVertical: 10,
         borderRadius: 20,
-        // blurRadius: 10,
     },
     title: {
         fontSize: 15,

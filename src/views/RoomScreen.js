@@ -2,12 +2,29 @@ import { StyleSheet, Text, View, Animated } from "react-native";
 import React, { useEffect, useState } from "react";
 import ProfileImage from "../components/ProfileImage";
 import MenuTextBox from "../components/MenuTextBox";
+import { useSelector, useDispatch } from "react-redux";
+import socket from "../../socket";
 
 const RoomScreen = ({navigation, room_id, title, menu}) => {
+    const { user_id } = useSelector((state) => state.users);
     const [userList, setUserList] = useState([]);
     useEffect(() => {
         navigation.setOptions({headerTitle: title})
+        const packet = {
+            user_id: user_id,
+            room_id: room_id,
+        };
+        socket.emit("enter_room", packet, (res) => {
+            if (res == true) {
+                dispatch(setRoom(item.id));
+            } else {
+                Alert.alert("방에 입장할 수 없습니다");
+            }
+        });
 
+        socket.on("enter_room", async (packet, callback) => {
+            setUserList([...packet.rows]);
+        });
     }, [])
     
     const pad_array = (arr, len, fill) => {
@@ -31,7 +48,7 @@ const RoomScreen = ({navigation, room_id, title, menu}) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>카이마루 학식 먹을 사람~</Text>
+            <Text style={styles.title}>{title}</Text>
             <View style={styles.profileContainerHorizontal}>
                 {[0, 10, 6, 14, 2]
                     .map((i) => entity_list[i])

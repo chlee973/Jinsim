@@ -11,6 +11,7 @@ import {
     setLove,
     setHate,
     setChannel,
+    setRoom,
 } from "../redux/actions";
 
 const qs = require("qs");
@@ -61,6 +62,7 @@ const KakaoSignInScreen = ({ navigation }) => {
                 dispatch(setLove(user_info.love));
                 dispatch(setHate(user_info.hate));
                 dispatch(setChannel(user_info.channel_id))
+                dispatch(setRoom(user_info.room_id))
                 dispatch(setIsSignedIn(true));
             } else {
                 console.error("error getting access token");
