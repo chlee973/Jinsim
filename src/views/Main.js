@@ -6,8 +6,9 @@ import {
     ScrollView,
     StyleSheet,
     TouchableOpacity,
+    Alert,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setNickname, setProfileImage } from "../redux/actions";
 import ProfileImage from "../components/ProfileImage";
@@ -16,38 +17,96 @@ import SpeechBalloon from "../components/SpeechBalloon";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import ProfileBox from "../components/ProfileBox";
-
-const qs = require("qs");
-const axios = require("axios");
-
-const REST_API_KEY = "7bdb6912e4211d56037b4ddb88b84488";
-const LOGOUT_REDIRECT_URI = "http://192.249.18.145/oauth/kakao/logout";
+import socket from "../../socket";
+import { setRoom } from "../redux/actions";
+import { useIsFocused } from '@react-navigation/native';
 
 const Main = ({ navigation }) => {
-    const { nickname, profile_image } = useSelector((state) => state.users);
-    const onPressRoomCreate = () => {};
+    const dispatch = useDispatch();
+    const [userList, setUserList] = useState([]);
+    const [roomList, setRoomList] = useState([]);
+    const { user_id } = useSelector((state) => state.users);
+    const { nickname, profile_image, current_channel, love, hate } = useSelector(
+        (state) => state.users
+    );
+    const isFocused = useIsFocused();
+    const onPressRoomCreate = () => {
+        if (current_channel == null) {
+            Alert.alert("채널을 선택해주세요");
+            return;
+        }
+        navigation.navigate("방 생성");
+    };
     const onPressSignOut = () => {
-        navigation.navigate("로그아웃")
-    }
+        navigation.navigate("로그아웃");
+    };
+    const onPressChangeChannel = () => {
+        navigation.navigate("채널 선택");
+    };
+    const onSelectRoom = (item) => {
+        const packet = {
+            user_id: user_id,
+            room_id: item.id,
+        };
+        socket.emit("enter_room", packet, (res) => {
+            if (res == true) {
+                dispatch(setRoom(item.id));
+            } else {
+                Alert.alert("방에 입장할 수 없습니다");
+            }
+        });
+    };
+    const onPressUserProfile = (item) => {
+        navigation.navigate("프로필", {
+            user_id: item.id,
+            nickname: item.nickname,
+        });
+    };
+    socket.on("change_channel", async(packet, callback) => {
+        setUserList(packet.rows)
+    })
+    useEffect(() => {
+        navigation.setOptions({
+            headerTitle:
+            current_channel == null
+            ? "채널을 선택해주세요"
+                    : current_channel,
+                });
+                if (current_channel == null) {
+                    return;
+        }
+        const packet_request_users = {
+            channel_id: current_channel,
+        };
+        socket.emit("request_users", packet_request_users, (res) => {
+            setUserList(res.rows);
+        });
+        const packet_request_rooms = {
+            channel_id: current_channel,
+        };
+        socket.emit("request_rooms", packet_request_rooms, (res) => {
+            setRoomList(res.rows);
+        });
+    }, [current_channel, isFocused]);
+    useEffect(() => {
+
+    }, [current_channel])
+
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>몰입캠프 2분반</Text>
             <ScrollView
                 showsHorizontalScrollIndicator={false}
-                style={styles.scrollViewUsers}
                 horizontal={true}
             >
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((index, key) => {
-                    return (
-                        <ProfileImage
-                            image_uri={
-                                "https://img.etimg.com/thumb/width-640,height-480,imgsize-482493,resizemode-1,msid-68228307/news/politics-and-nation/how-central-european-state-serbia-contributed-to-making-of-uri/uri-indi.jpg"
-                            }
-                            nickname={`person${index}`}
-                            key={key}
-                        />
-                    );
-                })}
+                {userList.map((user, key) => (
+                    <ProfileImage
+                        id={user.id}
+                        image_uri={user.profile_image_url}
+                        nickname={user.name}
+                        key={key}
+                        onPress={onPressUserProfile}
+                    />
+                ))}
             </ScrollView>
             <Button
                 onPress={onPressRoomCreate}
@@ -59,26 +118,29 @@ const Main = ({ navigation }) => {
                 horizontal={false}
                 showsVerticalScrollIndicator={true}
             >
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((index, key) => {
-                    return (
-                        <RoomInfoBox
-                            title={`제목 ${index}`}
-                            menu={`메뉴 ${index}`}
-                            numOfPeople={index}
-                            maxCapacity={index * 2 + 1}
-                            key={key}
-                        />
-                    );
+                {roomList.map((item, key) => {
+                    <RoomInfoBox
+                        id={item.id}
+                        title={item.name}
+                        menu={item.menu}
+                        numOfPeople={1}
+                        maxCapacity={item.max_capacity}
+                        onPress={onSelectRoom}
+                        key={key}
+                    />;
                 })}
             </ScrollView>
             <ProfileBox
-                like_content={"제육볶음"}
-                hate_content={"쟁반짜장"}
-                image_uri = {profile_image}
+                like_content={love}
+                hate_content={hate}
+                image_uri={profile_image}
                 nickname={nickname}
-             />
+            />
             <View style={styles.iconContainer}>
-                <TouchableOpacity style={styles.icon}>
+                <TouchableOpacity
+                    style={styles.icon}
+                    onPress={onPressChangeChannel}
+                >
                     <FontAwesome name="exchange" size={30} color="black" />
                     <Text>채널 변경</Text>
                 </TouchableOpacity>

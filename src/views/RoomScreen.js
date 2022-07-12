@@ -1,9 +1,15 @@
 import { StyleSheet, Text, View, Animated } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ProfileImage from "../components/ProfileImage";
 import MenuTextBox from "../components/MenuTextBox";
 
-const RoomScreen = () => {
+const RoomScreen = ({navigation, room_id, title, menu}) => {
+    const [userList, setUserList] = useState([]);
+    useEffect(() => {
+        navigation.setOptions({headerTitle: title})
+
+    }, [])
+    
     const pad_array = (arr, len, fill) => {
         return arr.concat(Array(len).fill(fill)).slice(0, len);
     };
@@ -23,7 +29,6 @@ const RoomScreen = () => {
         nickname: padded_nickname_list[index],
     }));
 
-    const menu = "제육볶음";
     return (
         <View style={styles.container}>
             <Text style={styles.title}>카이마루 학식 먹을 사람~</Text>

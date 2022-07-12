@@ -1,49 +1,93 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Alert, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import socket from "../../socket";
+import RadioGroup from "react-native-radio-buttons-group";
+import CustomInput from "../components/CustomInput";
+import CustomButton from "../components/CustomButton";
+import { useSelector, useDispatch } from "react-redux";
+import { setChannel } from "../redux/actions";
 
-const ChangeChannelScreen = () => {
-  return (
-    <View style={styles.container}>
-            <Text style={styles.title}>채널 선택</Text>
-            <View style={styles.channel_container}>
-                <View style={styles.description_container}>
-                    <Text style={styles.description}>방제</Text>
-                </View>
-                <View style={styles.text_input_container}>
-                    <TextInput
-                        style={styles.text_input}
-                        clearButtonMode="while-editing"
-                    />
-                </View>
-            </View>
-            <View style={styles.channel_container}>
-                <View style={styles.description_container}>
-                    <Text style={styles.description}>메뉴</Text>
-                </View>
-                <View style={styles.text_input_container}>
-                    <TextInput
-                        style={styles.text_input}
-                        clearButtonMode="while-editing"
-                    />
-                </View>
-            </View>
-            <View style={styles.channel_container}>
-                <View style={styles.description_container}>
-                    <Text style={styles.description}>정원</Text>
-                </View>
-                <View style={styles.text_input_container}>
-                    <TextInput
-                        style={styles.text_input}
-                        keyboardType="number-pad"
-                    />
-                </View>
-            </View>
-            <Button title={"생성"} />
+const radioButtonsData = [
+    {
+        id: "1", // acts as primary key, should be unique and non-empty string
+        label: "몰입캠프 1분반",
+        value: "1",
+    },
+    {
+        id: "2",
+        label: "몰입캠프 2분반",
+        value: "2",
+    },
+    {
+        id: "3",
+        label: "몰입캠프 3분반",
+        value: "3",
+    },
+    {
+        id: "4",
+        label: "몰입캠프 4분반",
+        value: "4",
+    },
+];
+
+const ChangeChannelScreen = ({navigation}) => {
+    const dispatch = useDispatch();
+    const [radioButtons, setRadioButtons] = useState(radioButtonsData);
+    const [password, setPassword] = useState("");
+    const { user_id } = useSelector((state) => state.users);
+    const { is_signed_in, current_channel, current_room } = useSelector(
+        (state) => state.users
+    );
+    const onPressRadioButton = (radioButtonsArray) => {
+        console.log(radioButtonsArray)
+        setRadioButtons(radioButtonsArray);
+    };
+    const onConfirm = () => {
+        console.log("onConfirm")
+        if(password.length==0)
+            return
+        const selected = radioButtons.filter(item => (item.selected==true))
+        console.log(selected)
+        if(selected.length == 0)
+            return
+        const new_channel = selected[0].label
+        const packet = {
+            user_id: user_id,
+            password: password,
+            channel_from: current_channel,
+            channel_to: new_channel,
+        }
+        socket.emit("change_channel", packet, (res) => {
+            if(res == true) {
+                dispatch(setChannel(new_channel))
+                navigation.navigate("메인", {title: new_channel})
+            }
+            else {
+                Alert.alert("잘못된 비밀번호입니다")
+            }
+        })
+    }
+    return (
+        <View style={styles.container}>
+            <RadioGroup
+                radioButtons={radioButtons}
+                onPress={onPressRadioButton}
+                layout="column"
+            />
+            <CustomInput 
+            placeholder={"비밀번호"}
+            setValue={setPassword}
+            secureTextEntry={true}
+            />
+            <CustomButton
+            onPress={onConfirm}
+            text={"확인"}
+             />
         </View>
-  )
-}
+    );
+};
 
-export default ChangeChannelScreen
+export default ChangeChannelScreen;
 
 const styles = StyleSheet.create({
     container: {
@@ -54,4 +98,4 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: "bold",
     },
-})
+});

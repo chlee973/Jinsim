@@ -10,43 +10,64 @@ import RoomScreen from "./src/views/RoomScreen";
 import ProfileScreen from "./src/views/ProfileScreen";
 import BanVoteScreen from "./src/views/BanVoteScreen";
 import CreateRoomScreen from "./src/views/CreateRoomScreen";
+import ChangeChannelScreen from "./src/views/ChangeChannelScreen";
 
-const Stack = createNativeStackNavigator();
+const Stack_Sign_In = createNativeStackNavigator();
+const Stack_Main = createNativeStackNavigator();
+const Stack_Room = createNativeStackNavigator();
 const Root = () => {
-    const { is_signed_in } = useSelector((state) => state.signIn);
-    return (
-        <>
-            {is_signed_in ? (
-                <NavigationContainer styles={styles.container}>
-                    <Stack.Navigator initialRouteName="메인">
-                        <Stack.Screen name="메인" component={Main} />
-                        <Stack.Screen
-                            name="방 생성"
-                            component={CreateRoomScreen}
-                        />
-                        <Stack.Screen name="방" component={RoomScreen} />
-                        <Stack.Screen
-                            name="로그아웃"
-                            component={KakaoSignOutScreen}
-                        />
-                        <Stack.Screen name="프로필" component={ProfileScreen} />
-                    </Stack.Navigator>
-                </NavigationContainer>
-            ) : (
-                <NavigationContainer styles={styles.container}>
-                    <Stack.Navigator initialRouteName="로그인">
-                        <Stack.Screen name="로그인" component={SignInScreen} />
-                        <Stack.Screen
-                            name="카카오 로그인"
-                            component={KakaoSignInScreen}
-                        />
-                    </Stack.Navigator>
-                </NavigationContainer>
-            )}
-        </>
+    const { is_signed_in, current_channel, current_room } = useSelector(
+        (state) => state.users
     );
+    if (!is_signed_in) {
+        return (
+            <NavigationContainer styles={styles.container}>
+                <Stack_Sign_In.Navigator initialRouteName="로그인">
+                    <Stack_Sign_In.Screen name="로그인" component={SignInScreen} />
+                    <Stack_Sign_In.Screen
+                        name="카카오 로그인"
+                        component={KakaoSignInScreen}
+                    />
+                </Stack_Sign_In.Navigator>
+            </NavigationContainer>
+        );
+    }
+    else if (current_room == null) {
+        console.log(`cy and ${current_channel}`)
+        return (
+            <NavigationContainer styles={styles.container}>
+                <Stack_Main.Navigator initialRouteName="메인">
+                    <Stack_Main.Screen
+                        name="메인"
+                        component={Main}
+                    />
+                    <Stack_Main.Screen
+                        name="채널 선택"
+                        component={ChangeChannelScreen}
+                    />
+                    <Stack_Main.Screen name="방 생성" component={CreateRoomScreen} />
+                    <Stack_Main.Screen
+                        name="로그아웃"
+                        component={KakaoSignOutScreen}
+                    />
+                    <Stack_Main.Screen name="프로필" component={ProfileScreen} />
+                </Stack_Main.Navigator>
+            </NavigationContainer>
+        );
+    }
+    else {
+        return (
+            <NavigationContainer styles={styles.container}>
+                <Stack_Room.Navigator initialRouteName="방">
+                    <Stack_Room.Screen
+                        name="방"
+                        component={RoomScreen}
+                    />
+                </Stack_Room.Navigator>
+            </NavigationContainer>
+        );
+    }
 };
-
 export default Root;
 
 const styles = StyleSheet.create({

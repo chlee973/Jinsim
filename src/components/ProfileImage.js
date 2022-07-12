@@ -1,12 +1,12 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
 
-const ProfileImage = ({ image_uri, nickname }) => {
+const ProfileImage = ({ id, image_uri, nickname, onPress }) => {
     return (
-        <View style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={onPress}>
             <Image style={styles.image} source={{ uri: image_uri }} />
             <Text style={styles.text}>{nickname}</Text>
-        </View>
+        </TouchableOpacity>
     );
 };
 

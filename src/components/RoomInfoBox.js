@@ -2,9 +2,9 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 
-const RoomInfoBox = ({ title, menu, numOfPeople, maxCapacity }) => {
+const RoomInfoBox = ({id, title, menu, numOfPeople, maxCapacity, onPress}) => {
     return (
-        <TouchableOpacity onPress={() => {}} style={styles.container}>
+        <TouchableOpacity onPress={onPress} style={styles.container}>
             <Text style={styles.title}>{title}</Text>
             <Text style={styles.menu}>{menu}</Text>
             <View style={styles.capacityContainer}>

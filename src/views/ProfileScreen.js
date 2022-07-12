@@ -1,9 +1,14 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import ProfileBox from "../components/ProfileBox";
-import { FontAwesome5 } from '@expo/vector-icons'; 
+import { FontAwesome5 } from "@expo/vector-icons";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation, user_id, nickname }) => {
+    useEffect(() => {
+        navigation.setOptions({
+            headerTitle: `${nickname}의 프로필`,
+        });
+    });
     return (
         <View style={styles.container}>
             <View style={styles.emptyContainer} />
@@ -18,7 +23,7 @@ const ProfileScreen = () => {
                 />
             </View>
             <View style={styles.iconContainer}>
-                <View style={styles.icon}/>
+                <View style={styles.icon} />
                 <TouchableOpacity style={styles.icon}>
                     <FontAwesome5 name="ban" size={30} color="black" />
                     <Text>강퇴 요청</Text>

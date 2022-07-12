@@ -8,7 +8,7 @@ const qs = require("qs");
 const axios = require("axios");
 
 const REST_API_KEY = "7bdb6912e4211d56037b4ddb88b84488";
-const LOGOUT_REDIRECT_URI = "http://192.249.18.145/oauth/kakao/logout";
+const LOGOUT_REDIRECT_URI = "http://192.249.18.145:443/oauth/kakao/logout";
 
 const KakaoSignOutScreen = ({ navigation }) => {
     const dispatch = useDispatch();
